@@ -9,6 +9,10 @@
     100% { background-position: 0% 50%; }
 }
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     display: flex;
     justify-content: center;
@@ -20,15 +24,17 @@ body {
     animation: fadeIn 1s ease-out;
     color: #fff;
     user-select: none;
+    padding: 20px;
 }
 
 .game-container {
     text-align: center;
     background: #2c3e50;
-    padding: 30px;
     border-radius: 15px;
     box-shadow: 0 0 20px rgba(0,0,0,0.3);
-    width: 300px;
+    width: 90%;
+    max-width: 300px;
+    padding: 20px;
 }
 
 h1 {
@@ -42,15 +48,15 @@ h1 {
 }
 
 #bonus-image, #click-image {
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
     object-fit: contain;
     cursor: pointer;
     transition: transform 0.2s, opacity 0.5s;
-    -webkit-user-select: none; /* Chrome, Opera, Safari */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 #click-image:active, #bonus-image:active {
@@ -142,4 +148,29 @@ p {
 
 .play-game-link:hover {
     transform: scale(1.05);
+}
+
+@media (max-width: 480px) {
+    .game-container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    p {
+        font-size: 16px;
+    }
+
+    #bonus-image, #click-image {
+        width: 120px;
+        height: 120px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+    }
 }
