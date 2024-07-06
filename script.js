@@ -50,12 +50,25 @@ document.getElementById('bonus-button').addEventListener('click', () => {
     }
 });
 
+bonusImage.addEventListener('click', () => {
+    handleClick();
+});
+
 function animateButton(elementId) {
     const element = document.getElementById(elementId);
     element.classList.add('clicked');
     setTimeout(() => {
         element.classList.remove('clicked');
     }, 200);
+}
+
+function handleClick() {
+    clickCount++;
+    earnings += earningsPerClick * bonusMultiplier;
+    updateDisplay();
+    animateButton('click-image');
+    clickSound.play();
+    saveData();
 }
 
 function updateBonusMessage() {
