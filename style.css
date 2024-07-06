@@ -1,3 +1,14 @@
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes colorChange {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
 body {
     display: flex;
     justify-content: center;
@@ -6,8 +17,9 @@ body {
     margin: 0;
     background: linear-gradient(135deg, #71b7e6, #9b59b6);
     font-family: 'Arial', sans-serif;
+    animation: fadeIn 1s ease-out;
     color: #fff;
-    user-select: none; /* Запрет выделения текста */
+    user-select: none;
 }
 
 .game-container {
@@ -29,14 +41,16 @@ h1 {
     position: relative;
 }
 
-.hidden {
-    display: none;
-}
-
-#click-image, #bonus-image {
-    width: 100px;
+#bonus-image, #click-image {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
     cursor: pointer;
     transition: transform 0.2s, opacity 0.5s;
+    -webkit-user-select: none; /* Chrome, Opera, Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 
 #click-image:active, #bonus-image:active {
@@ -64,10 +78,6 @@ button {
     transform: scale(1.1);
 }
 
-.shop {
-    margin-top: 20px;
-}
-
 .withdraw-link, .back-link {
     display: block;
     margin: 10px 0;
@@ -91,7 +101,6 @@ p {
 
 .clicked {
     transform: scale(1.2);
-    background-color: #f1c40f !important;
 }
 
 .bonus-message {
@@ -105,6 +114,32 @@ p {
 }
 
 .bonus-message.show {
-    height: 30px; /* Примерная высота сообщения */
+    height: 30px;
     opacity: 1;
+}
+
+.hidden {
+    display: none;
+}
+
+.game-container {
+    animation: fadeIn 1s ease-out 0.5s both;
+}
+
+.play-game-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 18px;
+    text-decoration: none;
+    color: white;
+    border-radius: 5px;
+    background: linear-gradient(270deg, #ff6b6b, #4ecdc4, #45b7d1, #f7d794);
+    background-size: 300% 300%;
+    animation: colorChange 6s ease infinite;
+    transition: transform 0.3s;
+}
+
+.play-game-link:hover {
+    transform: scale(1.05);
 }
