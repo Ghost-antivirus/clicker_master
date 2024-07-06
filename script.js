@@ -4,42 +4,47 @@ const earningsPerClick = 0.01;
 let bonusMultiplier = 1;
 const bonusMessage = document.getElementById('bonus-message');
 const clickSound = document.getElementById('click-sound');
+const clickImage = document.getElementById('click-image');
+const bonusImage = document.getElementById('bonus-image');
 
 // Загрузка данных из localStorage при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
+    loadData();
+    updateDisplay();
+});
+
+function loadData() {
     const savedData = JSON.parse(localStorage.getItem('clickerData'));
     if (savedData) {
         clickCount = savedData.clicks;
         earnings = savedData.earnings;
         bonusMultiplier = savedData.bonusMultiplier;
-        document.getElementById('click-count').textContent = clickCount;
-        document.getElementById('earnings').textContent = earnings.toFixed(2);
-        if (bonusMultiplier > 1) {
-            updateBonusMessage();
-        }
     }
-});
+}
 
-document.getElementById('click-image').addEventListener('click', () => {
-    clickCount++;
-    earnings += earningsPerClick * bonusMultiplier;
-
+function updateDisplay() {
     document.getElementById('click-count').textContent = clickCount;
     document.getElementById('earnings').textContent = earnings.toFixed(2);
-    animateButton('click-image');
-    clickSound.play(); // Воспроизводим звук при клике
+}
 
-    saveData(); // Сохраняем данные
+clickImage.addEventListener('click', () => {
+    clickCount++;
+    earnings += earningsPerClick * bonusMultiplier;
+    updateDisplay();
+    animateButton('click-image');
+    clickSound.play();
+    saveData();
 });
 
 document.getElementById('bonus-button').addEventListener('click', () => {
     if (clickCount >= 100) {
         clickCount -= 100;
         bonusMultiplier += 0.5;
-        document.getElementById('click-count').textContent = clickCount;
-        updateBonusMessage();
+        updateDisplay();
         animateButton('bonus-button');
-        saveData(); // Сохраняем данные
+        animateImageChange();
+        updateBonusMessage();
+        saveData();
     } else {
         alert("Not enough clicks to buy bonus!");
     }
@@ -58,7 +63,24 @@ function updateBonusMessage() {
     bonusMessage.classList.add('show');
     setTimeout(() => {
         bonusMessage.classList.remove('show');
-    }, 3000); // Скрываем сообщение через 3 секунды
+    }, 3000);
+}
+
+function animateImageChange() {
+    clickImage.style.opacity = 0;
+    setTimeout(() => {
+        clickImage.classList.add('hidden');
+        bonusImage.classList.remove('hidden');
+        bonusImage.style.opacity = 1;
+        setTimeout(() => {
+            bonusImage.style.opacity = 0;
+            setTimeout(() => {
+                bonusImage.classList.add('hidden');
+                clickImage.classList.remove('hidden');
+                clickImage.style.opacity = 1;
+            }, 500);
+        }, 3000); // Время показа бонусного изображения
+    }, 500);
 }
 
 function saveData() {
@@ -73,20 +95,18 @@ function saveData() {
 // Script for withdraw.html
 if (window.location.pathname.includes('withdraw.html')) {
     document.addEventListener('DOMContentLoaded', () => {
-        const savedData = JSON.parse(localStorage.getItem('clickerData'));
-        if (savedData) {
-            document.getElementById('balance').textContent = savedData.earnings.toFixed(2);
-        }
+        loadData();
+        document.getElementById('balance').textContent = earnings.toFixed(2);
 
         document.getElementById('withdraw-form').addEventListener('submit', (event) => {
             event.preventDefault();
             const amount = parseFloat(document.getElementById('amount').value);
 
-            if (amount > 0 && amount <= parseFloat(document.getElementById('balance').textContent)) {
+            if (amount > 0 && amount <= earnings) {
                 earnings -= amount;
                 document.getElementById('balance').textContent = earnings.toFixed(2);
                 alert(`Successfully withdrawn $${amount.toFixed(2)}!`);
-                saveData(); // Сохраняем данные после вывода средств
+                saveData();
             } else {
                 alert('Invalid amount.');
             }
