@@ -2,15 +2,19 @@ let clickCount = 0;
 let earnings = 0.00;
 const earningsPerClick = 0.01;
 let bonusMultiplier = 1;
+let passiveIncome = 0;
+let passiveIncomeMultiplier = 1;
 const bonusMessage = document.getElementById('bonus-message');
 const clickSound = document.getElementById('click-sound');
 const clickImage = document.getElementById('click-image');
 const bonusImage = document.getElementById('bonus-image');
 
-// Загрузка данных из localStorage при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
     loadData();
     updateDisplay();
+    applyPassiveIncome();
+    checkWinStatus();
+    createPassiveIncomeElement();
 });
 
 function loadData() {
@@ -19,12 +23,45 @@ function loadData() {
         clickCount = savedData.clicks;
         earnings = savedData.earnings;
         bonusMultiplier = savedData.bonusMultiplier;
+        passiveIncome = savedData.passiveIncome || 0;
+        passiveIncomeMultiplier = savedData.passiveIncomeMultiplier || 1;
     }
 }
 
 function updateDisplay() {
     document.getElementById('click-count').textContent = clickCount;
     document.getElementById('earnings').textContent = earnings.toFixed(2);
+    updatePassiveIncomeDisplay();
+}
+
+function updatePassiveIncomeDisplay() {
+    const passiveIncomeElement = document.getElementById('passive-income');
+    if (passiveIncomeElement) {
+        passiveIncomeElement.textContent = `Passive Income: $${(passiveIncome * passiveIncomeMultiplier).toFixed(2)}/min (x${passiveIncomeMultiplier.toFixed(1)})`;
+    }
+}
+
+function createPassiveIncomeElement() {
+    if (!document.getElementById('passive-income')) {
+        const passiveIncomeElement = document.createElement('p');
+        passiveIncomeElement.id = 'passive-income';
+        document.querySelector('.click-area').appendChild(passiveIncomeElement);
+        updatePassiveIncomeDisplay();
+    }
+}
+
+function checkWinStatus() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('win') === 'true') {
+        const passiveIncomeElement = document.getElementById('passive-income');
+        if (passiveIncomeElement) {
+            passiveIncomeElement.style.opacity = '0';
+            setTimeout(() => {
+                passiveIncomeElement.style.transition = 'opacity 1s';
+                passiveIncomeElement.style.opacity = '1';
+            }, 500);
+        }
+    }
 }
 
 clickImage.addEventListener('click', () => {
@@ -98,11 +135,21 @@ function animateImageChange() {
     }, 500);
 }
 
+function applyPassiveIncome() {
+    setInterval(() => {
+        earnings += passiveIncome * passiveIncomeMultiplier;
+        updateDisplay();
+        saveData();
+    }, 60000); // Добавляем пассивный доход каждую минуту
+}
+
 function saveData() {
     const data = {
         clicks: clickCount,
         earnings: earnings,
-        bonusMultiplier: bonusMultiplier
+        bonusMultiplier: bonusMultiplier,
+        passiveIncome: passiveIncome,
+        passiveIncomeMultiplier: passiveIncomeMultiplier
     };
     localStorage.setItem('clickerData', JSON.stringify(data));
 }
@@ -130,3 +177,11 @@ if (window.location.pathname.includes('withdraw.html')) {
 }
 
 window.addEventListener('beforeunload', saveData);
+
+function applyPassiveIncome() {
+    setInterval(() => {
+        earnings += passiveIncome;
+        document.getElementById('earnings').textContent = earnings.toFixed(2);
+        saveData();
+    }, 60000); // Добавляем пассивный доход каждую минуту
+}
