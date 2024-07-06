@@ -29,13 +29,17 @@ h1 {
     position: relative;
 }
 
-#click-image {
-    width: 100px;
-    cursor: pointer;
-    transition: transform 0.2s;
+.hidden {
+    display: none;
 }
 
-#click-image:active {
+#click-image, #bonus-image {
+    width: 100px;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.5s;
+}
+
+#click-image:active, #bonus-image:active {
     transform: scale(1.1);
 }
 
@@ -93,15 +97,14 @@ p {
 .bonus-message {
     font-size: 20px;
     color: #f1c40f;
-    position: absolute;
-    top: 100%; /* Начальная позиция снизу */
-    left: 50%;
-    transform: translateX(-50%);
+    margin-top: 10px;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.5s ease-out, opacity 0.5s ease-out;
     opacity: 0;
-    transition: transform 0.5s, opacity 0.5s;
 }
 
 .bonus-message.show {
-    transform: translateX(-50%) translateY(-20px); /* Появление снизу */
+    height: 30px; /* Примерная высота сообщения */
     opacity: 1;
 }
