@@ -85,12 +85,14 @@ function animateImageChange() {
         clickImage.classList.add('hidden');
         bonusImage.classList.remove('hidden');
         bonusImage.style.opacity = 1;
+        document.getElementById('next').textContent = ""
         setTimeout(() => {
             bonusImage.style.opacity = 0;
             setTimeout(() => {
                 bonusImage.classList.add('hidden');
                 clickImage.classList.remove('hidden');
                 clickImage.style.opacity = 1;
+                document.getElementById('next').textContent = " "
             }, 500);
         }, 3000); // Время показа бонусного изображения
     }, 500);
