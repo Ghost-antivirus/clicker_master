@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Clicker Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>Mini Clicker Game</h1>
+        <div class="click-area">
+            <img id="click-image" src="Zelensky.jpg" alt="Click me!" />
+            <p>Clicks: <span id="click-count">0</span></p>
+            <p>Earned: $<span id="earnings">0.00</span></p>
+            <div class="bonus-message" id="bonus-message">Bonus Multiplier: x1.5</div>
+        </div>
+        <div class="shop">
+            <h2>Shop</h2>
+            <button id="bonus-button">Buy Bonus (100 clicks)</button>
+            <a href="withdraw.html" class="withdraw-link">Withdraw Earnings</a>
+        </div>
+    </div>
+
+    <audio id="click-sound" src="Sound.mp3"></audio>
+    
+    <script src="script.js"></script>
+</body>
+</html>
